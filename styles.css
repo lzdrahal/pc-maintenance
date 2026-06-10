@@ -1,0 +1,205 @@
+:root {
+    --bg-dark: #0f172a;
+    --sidebar-bg: rgba(30, 41, 59, 0.7);
+    --card-bg: rgba(30, 41, 59, 0.5);
+    --accent: #06b6d4;
+    --accent-hover: #0891b2;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border: rgba(255, 255, 255, 0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+    /* subtle background gradient */
+    background: radial-gradient(circle at top right, #1e293b 0%, #0f172a 100%);
+}
+
+.app-container {
+    display: flex;
+    height: 100%;
+}
+
+.sidebar {
+    width: 280px;
+    background: var(--sidebar-bg);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.task-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-primary);
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+.task-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--border);
+}
+
+.task-btn:active { transform: scale(0.98); }
+
+.task-btn.active {
+    background: rgba(6, 182, 212, 0.15);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.task-btn.primary {
+    background: var(--accent);
+    color: #fff;
+    margin-top: 0.5rem;
+    font-weight: 600;
+}
+
+.task-btn.primary:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0.5rem 0;
+}
+
+.main-content {
+    flex: 1;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.report-btn {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.report-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+}
+.report-btn.hidden {
+    display: none;
+}
+
+.status-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+}
+
+.terminal-container {
+    flex: 1;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.terminal-header {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.dots { display: flex; gap: 6px; }
+.dots span {
+    width: 12px; height: 12px; border-radius: 50%;
+}
+.dots span:nth-child(1) { background: #ff5f56; }
+.dots span:nth-child(2) { background: #ffbd2e; }
+.dots span:nth-child(3) { background: #27c93f; }
+
+.terminal-title {
+    margin-left: 1rem;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.terminal-body {
+    flex: 1;
+    padding: 1.5rem;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    overflow-y: auto;
+    color: #a5b4fc;
+}
+
+.log-line { margin-bottom: 4px; word-break: break-all; }
+.log-error { color: #fca5a5; }
+.log-success { color: #86efac; }

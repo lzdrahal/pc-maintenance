@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PC Maintenance Toolkit</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Maintenance</h2>
+            <div class="task-list">
+                <button class="task-btn" data-script="Update-Windows.ps1">
+                    <span class="icon">🔄</span> Update Windows
+                </button>
+                <button class="task-btn" data-script="Update-Software.ps1">
+                    <span class="icon">📦</span> Update Software
+                </button>
+                <button class="task-btn" data-script="Cleanup-System.ps1">
+                    <span class="icon">🗑️</span> Clean System Junk
+                </button>
+                <button class="task-btn" data-script="Repair-System.ps1">
+                    <span class="icon">🔧</span> Repair System Files
+                </button>
+                <button class="task-btn" data-script="Optimize-Network.ps1">
+                    <span class="icon">🌐</span> Optimize Network
+                </button>
+                <div class="divider"></div>
+                <button class="task-btn primary" id="run-all-btn">
+                    <span class="icon">⚡</span> Run ALL Tasks
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="header-actions">
+                    <button id="report-btn" class="report-btn hidden"><span class="icon">🐞</span> Report Issue</button>
+                    <div class="status-badge">Ready</div>
+                </div>
+            </div>
+            
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <div class="terminal-title">System Logs</div>
+                </div>
+                <div class="terminal-body" id="terminal-output">
+                    Welcome to PC Maintenance Toolkit.<br>Select a task from the left to begin.<br><br>
+                    <i>Note: On Windows, please run this application as Administrator.</i><br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html>

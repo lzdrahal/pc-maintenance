@@ -1,0 +1,43 @@
+{
+  "name": "pc-maintenance",
+  "version": "1.0.0",
+  "description": "A collection of PowerShell scripts to automate and simplify routine maintenance tasks on a Windows PC.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.pcmaintenance.toolkit",
+    "productName": "PC Maintenance Toolkit",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "portable",
+        "nsis"
+      ]
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "styles.css",
+      "renderer.js",
+      "src/**/*"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-personal:lzdrahal/pc-maintenance.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^42.4.0",
+    "electron-builder": "^26.15.2"
+  }
+}
