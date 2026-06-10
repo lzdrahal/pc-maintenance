@@ -3,6 +3,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const fs = require('fs');
 const os = require('os');
+const { autoUpdater } = require('electron-updater');
 
 let mainWindow;
 let currentSessionLog = '';
@@ -23,8 +24,38 @@ function createWindow() {
     mainWindow.loadFile('index.html');
 }
 
+function setupUpdater(window) {
+    autoUpdater.on('checking-for-update', () => {
+        window.webContents.send('update-message', 'Checking for updates...');
+    });
+    autoUpdater.on('update-available', (info) => {
+        window.webContents.send('update-message', `Update v${info.version} available! Downloading...`);
+    });
+    autoUpdater.on('update-not-available', (info) => {
+        window.webContents.send('update-message', 'App is up to date.');
+    });
+    autoUpdater.on('error', (err) => {
+        window.webContents.send('update-message', `Error in auto-updater: ${err.message}`);
+    });
+    autoUpdater.on('update-downloaded', (info) => {
+        window.webContents.send('update-message', `Update downloaded. Restarting to install...`);
+        setTimeout(() => {
+            autoUpdater.quitAndInstall();
+        }, 3000);
+    });
+}
+
 app.whenReady().then(() => {
     createWindow();
+    
+    // Only check for updates in production (packaged) apps
+    if (app.isPackaged) {
+        setupUpdater(mainWindow);
+        autoUpdater.checkForUpdatesAndNotify();
+    } else {
+        // Mock update message in dev
+        setTimeout(() => mainWindow.webContents.send('update-message', 'Running in dev mode. Auto-updater disabled.'), 2000);
+    }
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {

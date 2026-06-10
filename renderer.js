@@ -22,6 +22,24 @@ function appendLog(text, type = 'normal') {
     terminalOutput.scrollTop = terminalOutput.scrollHeight;
 }
 
+window.api.onUpdateMessage((msg) => {
+    appendLog(`[AutoUpdater] ${msg}`, 'normal');
+    // Also update the status badge briefly
+    statusBadge.textContent = 'Update Check';
+    statusBadge.style.color = '#06b6d4';
+    statusBadge.style.background = 'rgba(6, 182, 212, 0.15)';
+    statusBadge.style.borderColor = 'rgba(6, 182, 212, 0.3)';
+    
+    setTimeout(() => {
+        if (!isRunning) {
+            statusBadge.textContent = 'Ready';
+            statusBadge.style.color = '#10b981';
+            statusBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+            statusBadge.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+        }
+    }, 4000);
+});
+
 window.api.onTaskOutput((data) => {
     // Determine log type based on content loosely
     let type = 'normal';
