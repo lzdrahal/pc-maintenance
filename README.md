@@ -15,7 +15,7 @@ A collection of PowerShell scripts to automate and simplify routine maintenance 
 **Easiest Method (One-Line Command)**
 You can run this single command in an Administrator PowerShell window to automatically download, extract, and launch the toolkit without any manual steps:
 ```powershell
-Invoke-WebRequest -Uri "https://github.com/lzdrahal/pc-maintenance/archive/refs/heads/main.zip" -OutFile "$env:TEMP\maintenance.zip"; Expand-Archive "$env:TEMP\maintenance.zip" -DestinationPath "$env:TEMP\maintenance" -Force; Set-Location "$env:TEMP\maintenance\pc-maintenance-main"; .\Run-Maintenance.ps1
+Invoke-WebRequest -Uri "https://github.com/lzdrahal/pc-maintenance/archive/refs/heads/master.zip" -OutFile "$env:TEMP\maintenance.zip"; Expand-Archive "$env:TEMP\maintenance.zip" -DestinationPath "$env:TEMP\maintenance" -Force; Set-Location "$env:TEMP\maintenance\pc-maintenance-master"; .\Run-Maintenance.ps1
 ```
 
 **Manual Method**
