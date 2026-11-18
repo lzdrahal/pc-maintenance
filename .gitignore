@@ -14,10 +14,13 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Electron Builder Output
+# Build & Tauri Output
 dist/
 build/
 release/
+src-tauri/target/
+src-tauri/gen/
+*.dmg
 
 # Optional npm cache directory
 .npm

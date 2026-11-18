@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
+  <script src="theme-init.js"></script>
+  <title>System Maintenance Toolkit</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12a9 9 0 1 1-3.2-6.9" />
+            <circle cx="19" cy="5" r="1.4" fill="currentColor" stroke="none" />
+            <path d="m8.5 12.2 2.4 2.4 4.8-4.8" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>System Maintenance Toolkit</h1>
+          <span class="version-pill" id="app-version">v2.0.0</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
+          <span class="theme-option theme-option-to-light">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+            </svg>
+            <span>Light</span>
+          </span>
+          <span class="theme-option theme-option-to-dark">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+            <span>Dark</span>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <section id="update-banner" class="banner banner-info hidden" aria-live="polite">
+      <div class="banner-body">
+        <strong id="update-title">Update available</strong>
+        <span id="update-message">A newer version of System Maintenance Toolkit is ready.</span>
+      </div>
+      <div class="banner-actions">
+        <button type="button" class="btn btn-primary btn-sm" id="update-download-btn">Download Update</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="update-dismiss-btn">Dismiss</button>
+      </div>
+    </section>
+
+    <section class="system-strip" aria-label="System status">
+      <div class="stat-pill">
+        <span class="stat-label">System</span>
+        <span class="stat-value" id="sys-os">Detecting...</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">Packages</span>
+        <span class="stat-value" id="sys-pkg">Checking...</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-label">Free Space</span>
+        <span class="stat-value" id="sys-disk">--</span>
+      </div>
+      <div class="stat-pill stat-pill-admin">
+        <span class="stat-label">Privileges</span>
+        <span class="stat-value" id="sys-admin">--</span>
+        <button type="button" class="btn btn-outline btn-xs hidden" id="relaunch-admin-btn">Restart as Admin</button>
+      </div>
+    </section>
+
+    <main class="dashboard-main">
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <button type="button" class="btn btn-ghost btn-sm" id="select-all-btn">Select All</button>
+          <button type="button" class="btn btn-ghost btn-sm" id="select-none-btn">Select None</button>
+          <span class="selection-summary" id="selection-count">0 selected</span>
+        </div>
+        <div class="toolbar-right">
+          <button type="button" class="btn btn-danger hidden" id="cancel-btn">Cancel</button>
+          <button type="button" class="btn btn-primary" id="run-selected-btn">Run Selected (0)</button>
+        </div>
+      </div>
+
+      <section id="summary-banner" class="banner hidden" aria-live="polite">
+        <div class="banner-body">
+          <strong id="summary-title">Maintenance Complete</strong>
+          <span id="summary-text"></span>
+        </div>
+        <div class="banner-actions">
+          <button type="button" class="btn btn-outline btn-sm hidden" id="summary-settings-btn">Open Software Update Settings</button>
+          <button type="button" class="btn btn-danger-outline btn-sm hidden" id="report-issue-btn">Report Issue</button>
+        </div>
+      </section>
+
+      <section class="task-list" id="task-list" aria-label="Maintenance tasks">
+        <div class="loading-state">Loading maintenance tasks for your system...</div>
+      </section>
+
+      <section class="log-section">
+        <details id="log-panel" class="log-details">
+          <summary class="log-summary">
+            <span class="log-summary-title">Technical Output</span>
+            <span class="log-count-pill" id="log-count">0 lines</span>
+          </summary>
+          <div class="log-content">
+            <div class="log-toolbar">
+              <label class="inline-check">
+                <input type="checkbox" id="autoscroll-toggle" checked>
+                <span>Auto-scroll</span>
+              </label>
+              <div class="log-toolbar-actions">
+                <button type="button" class="btn btn-ghost btn-xs" id="copy-log-btn">Copy Log</button>
+                <button type="button" class="btn btn-ghost btn-xs" id="clear-log-btn">Clear</button>
+              </div>
+            </div>
+            <div class="terminal-output" id="terminal-output" role="log" aria-live="off">
+              <div class="log-line log-info">Ready. Select tasks above and press Run Selected.</div>
+            </div>
+          </div>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+    <form method="dialog" class="dialog-form">
+      <h2 id="confirm-title">Confirm Permanent Deletion</h2>
+      <p id="confirm-message" class="dialog-message"></p>
+      <div class="dialog-actions">
+        <button type="submit" value="cancel" class="btn btn-ghost" autofocus>Cancel</button>
+        <button type="submit" value="confirm" class="btn btn-danger" id="confirm-proceed-btn">Continue</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

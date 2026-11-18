@@ -5,24 +5,31 @@
     Runs SFC (System File Checker) and DISM (Deployment Image Servicing and Management) tools.
 #>
 Write-Host "Starting System Repair Checks..." -ForegroundColor Cyan
+$hasError = $false
 
 Write-Host "1. Running DISM /RestoreHealth (This may take a while)..." -ForegroundColor Yellow
-try {
-    # /Online targets the running operating system
-    # /Cleanup-Image performs cleanup operations on the image
-    # /RestoreHealth scans the image for component store corruption and performs repair operations
-    Start-Process -FilePath "dism.exe" -ArgumentList "/Online /Cleanup-Image /RestoreHealth" -Wait -NoNewWindow
+& dism.exe /Online /Cleanup-Image /RestoreHealth
+$dismExit = $LASTEXITCODE
+if ($dismExit -eq 0) {
     Write-Host "DISM check completed." -ForegroundColor Green
-} catch {
-    Write-Host "Error running DISM." -ForegroundColor Red
+} else {
+    Write-Host "DISM exited with code $dismExit." -ForegroundColor Red
+    $hasError = $true
 }
 
 Write-Host "`n2. Running SFC /scannow (System File Checker)..." -ForegroundColor Yellow
-try {
-    Start-Process -FilePath "sfc.exe" -ArgumentList "/scannow" -Wait -NoNewWindow
+& sfc.exe /scannow
+$sfcExit = $LASTEXITCODE
+if ($sfcExit -eq 0) {
     Write-Host "SFC scan completed." -ForegroundColor Green
-} catch {
-    Write-Host "Error running SFC." -ForegroundColor Red
+} else {
+    Write-Host "SFC exited with code $sfcExit." -ForegroundColor Red
+    $hasError = $true
+}
+
+if ($hasError) {
+    Write-Host "`nSystem Repair finished with errors." -ForegroundColor Red
+    exit 1
 }
 
 Write-Host "`nSystem Repair Operations Finished." -ForegroundColor Green

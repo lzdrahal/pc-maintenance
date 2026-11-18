@@ -1,60 +1,78 @@
-# Windows PC Maintenance Toolkit
+# System Maintenance Toolkit
 
-A modern, graphical desktop application designed to automate and simplify routine maintenance tasks on a Windows PC. It provides a sleek user interface built on top of powerful PowerShell automation scripts.
-
-## Download & Installation
-
-The easiest way to use the toolkit is to download the compiled `.exe` file.
-
-1. Go to the [Releases](../../releases) page of this repository.
-2. Download the latest `PC Maintenance Toolkit Setup.exe` file.
-3. Run the installer. The application will launch automatically and install a shortcut on your desktop.
+A user-friendly, cross-platform desktop application for routine **macOS** and **Windows** maintenance, built with **Tauri v2**.
 
 ## Features
 
-### User Interface & Experience
-- **Modern Dashboard**: A sleek, dark-mode user interface built with HTML/CSS and Electron, providing a much friendlier experience than raw terminal windows.
-- **Real-Time Terminal Simulator**: Watch the live output of the PowerShell scripts as they run securely in the background.
-- **Smart Auto-Updater**: The application silently checks GitHub for new releases when opened. If an update is found, it downloads in the background and prompts you to restart!
+- **OS-Aware Guided Dashboard**: Automatically detects macOS (Apple Silicon / Intel) or Windows, package managers, free disk space, and privileges.
+- **Selective Execution & Live Controls**: Pick individual tasks with checkboxes, configure safe inline options, run one or many tasks sequentially, or cancel active work mid-run.
+- **Clear Summaries + Collapsible Technical Output**: Plain-English completion summaries (including space freed and restart hints) alongside a collapsible live log viewer with copy and clear actions.
+- **System-Matched Light & Dark Mode**: Automatically follows your OS theme with a manual header toggle.
+- **Non-Blocking Update Check**: Checks GitHub Releases on launch and links directly to new versions when available.
+- **One-Click Issue Reporting**: Saves a diagnostic session log (`maintenance-error.log`), opens its folder, and prepares an email report when a task fails.
 
-### Built-in Error Reporting
-If a maintenance task encounters a critical failure, a **Report Issue** button will appear. Clicking this button automatically securely saves your session log and drafts an email with the exact error details so the developer can fix it.
+### macOS Tasks
+- **Update macOS** (`Admin`): Checks `softwareupdate --list` and installs recommended updates via native macOS authorization prompt (includes a shortcut to System Settings if Apple Silicon interactive confirmation is required).
+- **Update Homebrew Packages** *(auto-detected — shown only when `brew` is installed)*: Runs `brew update`, `brew upgrade --formula`, optional `brew upgrade --cask` (default ON, without `--greedy`), `brew autoremove`, and `brew cleanup` as your normal user.
+- **Clean System Junk**: Safely clears non-Apple caches and logs in `~/Library/Caches` and `~/Library/Logs` while skipping protected system directories. Optional **Empty Trash** toggle (off by default, requires confirmation).
+- **Disk & System Health**: Verifies startup volume integrity (`diskutil verifyVolume /`), checks drive SMART status, and runs `brew doctor` when Homebrew is installed (Homebrew warnings are reported as non-fatal warnings).
+- **Optimize Network** (`Admin`): Flushes macOS DNS cache and refreshes `mDNSResponder`.
 
-### Core Maintenance Tasks
-- **Windows Update**: Checks for, downloads, and installs available Windows updates.
-- **Software Update**: Upgrades installed applications using the built-in `winget` package manager.
-- **System Cleanup**: Empties temporary folders (User Temp, Windows Temp, Prefetch, SoftwareDistribution) and the Recycle Bin.
-- **System Repair**: Runs standard system integrity checks (`sfc /scannow` and `DISM /RestoreHealth`).
-- **Network Optimization**: Resets network caches, Winsock, and TCP/IP stack to resolve basic network issues.
+### Windows Tasks
+- **Update Windows** (`Admin`): Searches for, downloads, and installs available Windows updates.
+- **Update Software (Winget)**: Upgrades installed applications via `winget` (automatically treats "no updates available" as up to date).
+- **Clean System Junk** (`Admin`): Cleans user/Windows temp folders, Prefetch, and Windows Update download cache. Optional **Empty Recycle Bin** toggle (off by default, requires confirmation).
+- **Repair System Files** (`Admin`): Runs `DISM /RestoreHealth` and `sfc /scannow` with live streaming output.
+- **Optimize Network** (`Admin`): Flushes DNS cache and resets Winsock and TCP/IP stack.
+- Includes a **Restart as Admin** button when launched without Administrator privileges.
 
 ---
 
-## For Developers
+## Download & Installation
 
-The application architecture utilizes an Electron front-end running isolated PowerShell child-processes on the back-end.
+1. Open the [Releases](../../releases) page.
+2. Download the installer for your OS:
+   - **macOS (Apple Silicon & Intel)**: `System Maintenance Toolkit_x.y.z_universal.dmg` (or `.app.zip`)
+   - **Windows (x64)**: `System Maintenance Toolkit_x.y.z_x64-setup.exe`
 
-### Local Development
-To run the app in development mode on your machine:
+### First Launch on Unsigned macOS Builds
+Because the macOS build is unsigned (no Apple Developer ID certificate), Gatekeeper may block double-clicking on first launch:
+1. Drag **System Maintenance Toolkit.app** into **Applications**.
+2. **Right-click** (or Control-click) the app and choose **Open**, then confirm **Open**.
+   - On newer macOS versions if blocked immediately: open **System Settings → Privacy & Security**, scroll down, and click **Open Anyway**.
+
+---
+
+## Development
+
+### Prerequisites
+- **Node.js 22+**
+- **Rust 1.90+** (`rustup update stable`)
+- Platform prerequisites for Tauri v2 (macOS: Xcode Command Line Tools; Windows: WebView2 + Visual Studio C++ Build Tools)
+
+### Commands
 ```bash
-# Install dependencies
+# Install Tauri CLI
 npm install
 
-# Start the application
-npm start
+# Run in development mode
+npm run dev
+
+# Run Rust backend unit tests
+cargo test --manifest-path src-tauri/Cargo.toml
+
+# Build distributable installers for the current OS
+npm run build
 ```
-*Note for Mac/Linux users: The app features a "Mock Mode." If you run `npm start` on macOS or Linux, the app will simulate fake PowerShell logs so you can develop the UI without crashing the application.*
 
-### Automated Cloud Builds (CI/CD)
-This repository is configured with **GitHub Actions**. You do not need to manually compile the `.exe` file on your computer.
+### Publishing a Release (GitHub Actions)
+1. Update the version in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json`.
+2. Commit and push to `master` (CI verifies tests and builds on macOS + Windows).
+3. Tag and push to publish the GitHub Release with Universal macOS DMG/ZIP and Windows NSIS installer:
+   ```bash
+   git tag v2.0.0
+   git push --tags
+   ```
 
-To publish a new release to your users:
-1. Make your code changes and commit them to the `main` or `master` branch.
-2. Push your changes to GitHub.
-3. The GitHub Actions server will automatically spin up a Windows machine, compile the `.exe`, and upload it to the Releases page.
-4. Any users who have the app installed will automatically receive the update!
-
-### Legacy Manual PowerShell Usage
-If you prefer not to use the GUI, the core PowerShell scripts are still entirely intact and usable as standalone files.
-1. Open an Administrator PowerShell window.
-2. Navigate to the `/src` folder.
-3. Run `.\Run-Maintenance.ps1` to launch the interactive terminal menu.
+### Legacy Windows PowerShell CLI
+The standalone Windows PowerShell scripts remain in `src/` and can still be run directly in an elevated PowerShell window via `.\Run-Maintenance.ps1`.

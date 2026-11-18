@@ -1,53 +1,26 @@
 {
   "name": "pc-maintenance",
-  "version": "1.0.0",
-  "description": "A collection of PowerShell scripts to automate and simplify routine maintenance tasks on a Windows PC.",
-  "main": "main.js",
+  "version": "2.0.0",
+  "description": "Cross-platform desktop application for routine macOS and Windows maintenance.",
   "scripts": {
-    "start": "electron .",
-    "build:win": "electron-builder --win"
-  },
-  "build": {
-    "appId": "com.pcmaintenance.toolkit",
-    "productName": "PC Maintenance Toolkit",
-    "directories": {
-      "output": "dist"
-    },
-    "win": {
-      "target": [
-        "portable",
-        "nsis"
-      ]
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "lzdrahal",
-        "repo": "pc-maintenance"
-      }
-    ],
-    "files": [
-      "main.js",
-      "preload.js",
-      "index.html",
-      "styles.css",
-      "renderer.js",
-      "src/**/*"
-    ]
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "icon": "tauri icon"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com-personal:lzdrahal/pc-maintenance.git"
   },
-  "keywords": [],
+  "keywords": [
+    "maintenance",
+    "macos",
+    "windows",
+    "homebrew",
+    "tauri"
+  ],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "devDependencies": {
-    "electron": "42.4.0",
-    "electron-builder": "^26.15.2"
-  },
-  "dependencies": {
-    "electron-updater": "^6.8.9"
+    "@tauri-apps/cli": "^2"
   }
 }
