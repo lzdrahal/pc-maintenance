@@ -524,7 +524,11 @@ mod tests {
     #[test]
     fn builds_augmented_path_without_duplicates() {
         let brew = PathBuf::from("/opt/homebrew/bin/brew");
-        let joined = build_augmented_path(Some(&brew), Some("/usr/bin:/custom/bin:/opt/homebrew/bin"));
+        let existing = env::join_paths(["/usr/bin", "/custom/bin", "/opt/homebrew/bin"])
+            .unwrap()
+            .to_string_lossy()
+            .into_owned();
+        let joined = build_augmented_path(Some(&brew), Some(&existing));
         let parts: Vec<PathBuf> = env::split_paths(&joined).collect();
 
         assert_eq!(parts[0], PathBuf::from("/opt/homebrew/bin"));
